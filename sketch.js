@@ -1,3 +1,6 @@
+function preload() {
+}
+
 function setup() {
 	let myCanvas = createCanvas(600, 400);
 	myCanvas.parent("parent_to_p5_canvas");
