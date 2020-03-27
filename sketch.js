@@ -13,11 +13,13 @@ function setup() {
 	print("tkills = " + tkills.getColumnCount() )
 	print("weeks = " + week.getColumnCount() )
 	tubelights = selectAll(".tubelight")
+	startingWeek = parseInt(random(week.getColumnCount()))
 }
 
 function draw() {
-	print("total weeks done so far = " + parseInt(frameCount / (FRAMERATE*7 ))) 
-	let currentWeek = (parseInt(frameCount / (FRAMERATE*7) ) % week.getColumnCount())
+	let currentWeek_notNormalised = startingWeek + parseInt(frameCount / (FRAMERATE*7) )
+	print("total weeks done so far = " + currentWeek_notNormalised )
+	let currentWeek = currentWeek_notNormalised % week.getColumnCount()
 	print("current week = " + currentWeek)
 	document.getElementById("week").innerHTML = week.get(0,currentWeek)
 	let totalFrames = frameCount
