@@ -1,4 +1,4 @@
-let FRAMERATE = 30
+let FRAMERATE = 15
 
 function preload() {
 	ckills = loadTable('data/coalition-kills.csv', 'csv');
