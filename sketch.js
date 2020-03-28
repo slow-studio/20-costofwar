@@ -1,4 +1,6 @@
 let FRAMERATE = 15
+let lightOn = "red"
+let lightOff = "#fafafa"
 
 function preload() {
 	ckills = loadTable('data/coalition-kills.csv', 'csv');
@@ -31,15 +33,15 @@ function draw() {
 		ckillsInThisWeek = (FRAMERATE*7)/2
 	print("ckillsInThisWeek = " + ckillsInThisWeek)
 	if (framesPassedInThisWeek % (parseInt( 7 * (FRAMERATE) / ckillsInThisWeek )) === 0)
-		tubelights[0].style('background-color', "black")
+		tubelights[0].style('background-color', lightOn)
 	else
-		tubelights[0].style('background-color', "#fafafa")
+		tubelights[0].style('background-color', lightOff)
 	let tkillsInThisWeek = tkills.get(0,currentWeek)
 	if (tkillsInThisWeek >= (FRAMERATE*7)/2 ) 
 		tkillsInThisWeek = (FRAMERATE*7)/2
 	print("tkillsInThisWeek = " + tkillsInThisWeek)
 	if (framesPassedInThisWeek % (parseInt( 7 * (FRAMERATE) / tkillsInThisWeek )) === 0)
-		tubelights[1].style('background-color', "black")
+		tubelights[1].style('background-color', lightOn)
 	else
-		tubelights[1].style('background-color', "#fafafa")
+		tubelights[1].style('background-color', lightOff)
 }
