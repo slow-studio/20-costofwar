@@ -16,6 +16,10 @@ function setup() {
 	print("weeks = " + week.getColumnCount() )
 	tubelights = selectAll(".tubelight")
 	startingWeek = parseInt(random(week.getColumnCount()))
+	slider = createSlider(0, week.getColumnCount(), startingWeek)
+	slider.parent("weekSliderContainer")
+	slider.addClass("slider")
+	slider.style('background-color', lightOff)
 }
 
 function draw() {
@@ -26,7 +30,7 @@ function draw() {
 	document.getElementById("week").innerHTML = week.get(0,currentWeek)
 	let fractionWeeksDone = 100*(currentWeek/week.getColumnCount())
 	print("fractionWeeksDone = " + currentWeek + "/" + week.getColumnCount() + " = " + parseInt(fractionWeeksDone) + "%")
-	document.getElementById("weekSlider").style.width = fractionWeeksDone+"%"
+	slider.value(fractionWeeksDone)
 	let totalFrames = frameCount
 	print("total frames = " + totalFrames)
 	let framesPassedInThisWeek = frameCount % (FRAMERATE*7)
