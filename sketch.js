@@ -24,6 +24,9 @@ function draw() {
 	let currentWeek = currentWeek_notNormalised % week.getColumnCount()
 	print("current week = " + currentWeek)
 	document.getElementById("week").innerHTML = week.get(0,currentWeek)
+	let fractionWeeksDone = 100*(currentWeek/week.getColumnCount())
+	print("fractionWeeksDone = " + currentWeek + "/" + week.getColumnCount() + " = " + parseInt(fractionWeeksDone) + "%")
+	document.getElementById("weekSlider").style.width = fractionWeeksDone+"%"
 	let totalFrames = frameCount
 	print("total frames = " + totalFrames)
 	let framesPassedInThisWeek = frameCount % (FRAMERATE*7)

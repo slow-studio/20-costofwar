@@ -12,6 +12,14 @@ body {
 	border: 1px solid #eee;
 }
 
+#weekSlider {
+	display: block;
+	width: 100%;
+	padding-top:1rem;
+	margin-bottom: 1rem;
+	background-color: black;
+}
+
 .tubelight {
 	display:block;
 	width:100%;
