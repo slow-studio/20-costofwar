@@ -27,7 +27,7 @@ function setup() {
 		anyNamesKnown = false
 		for(j = 0 ; j < individuals.getRowCount() ; ++j) {
 			jCode = individuals.get(j, 'IBC code')
-			if(jCode.startsWith(iCode)) { // i.e., we found an individual who'd been killed in that incident
+			if(jCode.startsWith(iCode) && jCode[iCode.length]==='-') { // i.e., we found an individual who'd been killed in that incident
 				if(!anyNamesKnown) poptext += "<span class='red'>Civilians identified</span>"
 				anyNamesKnown = true
 				name = individuals.get(j,'Name or Identifying Details')
