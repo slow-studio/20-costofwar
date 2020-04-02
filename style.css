@@ -20,3 +20,17 @@ body {
 	background-color:red;
 	transition: background-color .15s;
 }
+
+.popup {
+	position: absolute;
+	background: black;
+	font-size: 0.67rem;
+	line-height: .85rem;
+	color: white;
+	padding: 1rem;
+	margin-top: 1px;
+	max-width: 15rem;
+}
+.popup span.red {
+	color:red;
+}
