@@ -1,5 +1,3 @@
-const FRAMERATE = 10
-
 function preload() {
 	incidents = loadTable('data/ibc-incidents-2020-3-29-modified.csv', 'csv', 'header');
 	individuals = loadTable('data/ibc-individuals-2020-3-29-modified.csv', 'csv', 'header');
@@ -7,7 +5,6 @@ function preload() {
 
 function setup() {
 	noCanvas()
-	frameRate(FRAMERATE)
 	
 	totalIncidents = incidents.getRowCount()
 	print("total incidents = " + totalIncidents)
