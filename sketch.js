@@ -1,28 +1,58 @@
-function preload() {
-	jsondata = loadJSON('data/combined-dataset.json')
-}
+// fetch('data/combined-dataset.json')
+// .then(response => {
+// 	const reader = response.body.getReader();
 
-var totalIncidents
+// 	const processChunk = ({ done, value }) => {
+// 		console.log({ value, done });
+
+// 		if(done){
+// 			console.log('finished reading');
+// 			return;
+// 		}
+
+// 		return reader.read().then(processChunk);
+// 	}
+
+// 	reader.read()
+// 	.then(process);
+// })
+
+let jsondata = [];
+let totalIncidents = 0;
+
+oboe('data/combined-dataset.json')
+.node('events.*', function( event ){
+	jsondata.push(event);
+})  
+.done(function(events){
+	// count total incidents.
+	// note: this is the total number of incident-rectangles we'll draw in our visualisation
+	totalIncidents = events.length;
+});
+
+// function preload() {
+// 	jsondata = loadJSON('data/combined-dataset.json')
+// }
 
 function setup() {
 	noCanvas()
-
-	// count total incidents.
-	// note: this is the total number of incident-rectangles we'll draw in our visualisation
-	totalIncidents = Object.keys(jsondata).length
-	print(`total incidents = ${totalIncidents}`)
 
 	// before we begin drawing, let's empty this div of any text
 	select("#visualisation").html("") 
 }
 
 function draw() {
+	console.log({ totalIncidents, frameCount });
+
 	// every time the draw() loop runs, draw one incident-rectangle.
 	if(frameCount<totalIncidents) { 
 		irect(jsondata, frameCount)
 		select("#date").html(jsondata[frameCount]["d"])
 	} 
-	else noLoop()
+	else if (totalIncidents > 0){
+		console.log('finished');
+		noLoop()
+	}
 }
 
 /* make a rectangle that shows an incident */
