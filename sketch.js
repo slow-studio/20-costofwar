@@ -35,11 +35,7 @@ function irect (dataset, incidentCounter) {
 	deaths_toPrint = (minDeaths===maxDeaths)?maxDeaths:[minDeaths,maxDeaths].join('–')
 	
 	i.attribute('incidentIndex', incidentCounter)
-	i.attribute('incidentCode', dataset[incidentCounter]["i"])
-	i.attribute('onmouseover', "hoverOnIncident(this)")
-	i.attribute('onmousedown', "mousedownOnIncident(this)")
-	i.attribute('onclick', "clickOnIncident(this)")
-	i.attribute('onmouseout', "leaveIncident(this)")
+	// i.attribute('incidentCode', dataset[incidentCounter]["i"])
 
 	if(dataset[incidentCounter]["n"].length>0) i.style("backgroundColor", colour_darkred)
 
@@ -54,12 +50,12 @@ colour_darkred = 'rgb(200,0,0)'
 colour_black = 'rgb(0,0,0)'
 
 function hoverOnIncident(element) {
-	// print("mouseover on # " + element.getAttribute("incidentCode"))
+	incidentRowNumber = element.getAttribute("incidentIndex")
+	incidentCode = data[incidentRowNumber]["i"]
+
+	print("mouseover on # " + incidentCode)
 
 	element.style.backgroundColor = colour_verydarkred
-
-	incidentCode = element.getAttribute("incidentCode")
-	incidentRowNumber = element.getAttribute("incidentIndex")
 
 	enddate = data[incidentRowNumber]["d"]
 	loc_info = data[incidentRowNumber]["l"]
