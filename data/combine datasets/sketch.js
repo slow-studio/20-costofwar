@@ -13,7 +13,7 @@ function setup() {
 	totalIndividuals = individuals.getRowCount()
 	print("total identified = " + totalIndividuals)
 
-	data = []
+	data = {"incidents":[]}
 
 	for(i = 0 ; i < incidents.getRowCount() ; ++i) {
 		// show progress (on console)
@@ -38,7 +38,7 @@ function setup() {
 			}
 		}
 
-		data.push(
+		data.incidents.push(
 			{
 				'i' : incidentCode,
 				'd' : incidents.get(i, 'End Date'),
@@ -71,7 +71,7 @@ function setup() {
 	// print(incidents.getArray())
 
 	// export prepared dataset 
-	saveJSON(data, 'JSON')
+	saveJSON(data, 'combined-dataset')
 
 	createP("done! &mdash; data file should download now!").parent('#status')
 

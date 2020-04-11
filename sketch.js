@@ -1,38 +1,20 @@
-// fetch('data/combined-dataset.json')
-// .then(response => {
-// 	const reader = response.body.getReader();
-
-// 	const processChunk = ({ done, value }) => {
-// 		console.log({ value, done });
-
-// 		if(done){
-// 			console.log('finished reading');
-// 			return;
-// 		}
-
-// 		return reader.read().then(processChunk);
-// 	}
-
-// 	reader.read()
-// 	.then(process);
-// })
-
-let jsondata = [];
-let totalIncidents = 0;
+var jsondata = [];
+var dataLoadedCompletely = false
+var totalIncidents = 0;
 
 oboe('data/combined-dataset.json')
-.node('events.*', function( event ){
-	jsondata.push(event);
+.node('incidents.*', function( incident ){
+	++totalIncidents;
+	jsondata.push(incident);
 })  
 .done(function(events){
+	dataLoadedCompletely = true
+	console.log("data downloaded.")
 	// count total incidents.
 	// note: this is the total number of incident-rectangles we'll draw in our visualisation
-	totalIncidents = events.length;
+	totalIncidents = events.incidents.length; // ps. this is the same as saying totalIncidents = jsondata.length
+	console.log("dataset loaded! total incidents = ", totalIncidents)
 });
-
-// function preload() {
-// 	jsondata = loadJSON('data/combined-dataset.json')
-// }
 
 function setup() {
 	noCanvas()
@@ -41,17 +23,27 @@ function setup() {
 	select("#visualisation").html("") 
 }
 
-function draw() {
-	console.log({ totalIncidents, frameCount });
+// to count how many frames we couldn't draw for (because the data hadn't downloaded yet)
+let stuckFrames = 0 
 
-	// every time the draw() loop runs, draw one incident-rectangle.
-	if(frameCount<totalIncidents) { 
-		irect(jsondata, frameCount)
-		select("#date").html(jsondata[frameCount]["d"])
-	} 
-	else if (totalIncidents > 0){
-		console.log('finished');
-		noLoop()
+function draw() {
+
+	frameCounter = frameCount - 1 
+	indexOfIncidentToDraw = frameCounter - stuckFrames
+
+	// kill the loop (i.e., stop drawing) if you've finished drawing all the data
+	if(dataLoadedCompletely) {
+		if(indexOfIncidentToDraw >= totalIncidents) { // i.e., we have finished drawing all the data
+			noLoop()
+		}
+	}
+
+	if(indexOfIncidentToDraw < totalIncidents) { // need to check this while the data is loading, because sometimes not enough incidents' data has been downloaded yet (on slower internet connections)
+		irect(jsondata, indexOfIncidentToDraw)
+		select("#date").html(jsondata[indexOfIncidentToDraw]["d"])
+	} else {
+		++stuckFrames
+		// print("stuck for", stuckFrames, "frames")
 	}
 }
 
