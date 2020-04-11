@@ -9,6 +9,8 @@ function setup() {
 
 	totalIncidents = Object.keys(data).length
 	print(`total incidents = ${totalIncidents}`)
+
+	select("#visualisation").html("")
 }
 
 function draw() {
@@ -17,6 +19,7 @@ function draw() {
 		irect(data, incidentCounter)
 		select("#date").html(data[frameCount]["d"])
 	} 
+	else noLoop()
 }
 
 /* make a rectangle that shows an incident */
@@ -29,7 +32,7 @@ function irect (dataset, incidentCounter) {
 	maxDeaths = parseInt(dataset[incidentCounter]["k"])
 	avgDeaths = (minDeaths+maxDeaths)/2
 	i.style("width", avgDeaths + "px")
-	deaths_toPrint = (minDeaths===maxDeaths)?maxDeaths:[minDeaths,maxDeaths].join(/* an ndash, to represent 'to' */'–')
+	deaths_toPrint = (minDeaths===maxDeaths)?maxDeaths:[minDeaths,maxDeaths].join('–')
 	
 	i.attribute('incidentIndex', incidentCounter)
 	i.attribute('incidentCode', dataset[incidentCounter]["i"])
@@ -37,6 +40,8 @@ function irect (dataset, incidentCounter) {
 	i.attribute('onmousedown', "mousedownOnIncident(this)")
 	i.attribute('onclick', "clickOnIncident(this)")
 	i.attribute('onmouseout', "leaveIncident(this)")
+
+	if(dataset[incidentCounter]["n"].length>0) i.style("backgroundColor", colour_darkred)
 
 }
 
@@ -49,7 +54,7 @@ colour_darkred = 'rgb(200,0,0)'
 colour_black = 'rgb(0,0,0)'
 
 function hoverOnIncident(element) {
-	print("mouseover on # " + element.getAttribute("incidentCode"))
+	// print("mouseover on # " + element.getAttribute("incidentCode"))
 
 	element.style.backgroundColor = colour_verydarkred
 
@@ -103,19 +108,4 @@ function leaveIncident(element) {
 	while (element.firstChild) {
     	element.removeChild(element.firstChild);
 	}
-}
-
-/* other helper functions */
-
-function printTableAsArray(table) {
-	print(table.getArray())
-}
-
-function countTotalOfAllCellsInColumn(dataset, columnID) {
-	total = 0
-	arr = dataset.getColumn(columnID)
-	for (let i = 0 ; i < arr.length ; ++i) { 
-		total += parseInt(arr[i]) 
-	}
-	return total;
 }
