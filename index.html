@@ -23,37 +23,6 @@
     <!-- load scripts at the end -->
     <script src="p5.min.js"></script>
     <script src="sketch.js"></script>
-    <script>
-      document.getElementById("visualisation").onmouseover = function (e) {
-        console.log("trigger");
-        e = e || window.event;
-        var element = e.target ? e.target : e.srcElement;
-        if(element.parentElement.id === "visualisation") {
-          hoverOnIncident(element);
-        }
-      }
-      document.getElementById("visualisation").onmousedown = function (e) {
-        e = e || window.event;
-        var element = e.target ? e.target : e.srcElement;
-        if(element.parentElement.id === "visualisation") {
-          mousedownOnIncident(element);
-        }
-      }
-      document.getElementById("visualisation").onclick = function (e) {
-        e = e || window.event;
-        var element = e.target ? e.target : e.srcElement;
-        if(element.parentElement.id === "visualisation") {
-          clickOnIncident(element);
-        }
-      }
-      document.getElementById("visualisation").onmouseout = function (e) {
-        e = e || window.event;
-        var element = e.target ? e.target : e.srcElement;
-        if(element.parentElement.id === "visualisation") {
-          leaveIncident(element);
-        }
-      }
-    </script>
   </body>
 
 </html>
