@@ -16,14 +16,44 @@
       <p>each box represents a violent incident during the <a href="https://en.wikipedia.org/wiki/Iraqi_conflict_(2003%E2%80%93present)#Iraq_War_(2003%E2%80%932011)" target="_blank">iraq conflict</a><!-- ; each pixel's width represents one civilian's death -->. this graphic displays just under 200,000 documented civilian deaths ; however, fewer than 15,000 of those killed have been identified (and even fewer, named).</p>
       <p>data source: <a href="https://www.iraqbodycount.org/" target="_blank">iraq body count</a></p>
       <!-- visualisation ↓ -->
-      <div id="visualisation"></div>
+      <div id="visualisation">(Loading dataset: ~10MB)</div>
       <p id="date"></p>
     </div>
 
     <!-- load scripts at the end -->
     <script src="p5.min.js"></script>
     <script src="sketch.js"></script>
-
+    <script>
+      document.getElementById("visualisation").onmouseover = function (e) {
+        console.log("trigger");
+        e = e || window.event;
+        var element = e.target ? e.target : e.srcElement;
+        if(element.parentElement.id === "visualisation") {
+          hoverOnIncident(element);
+        }
+      }
+      document.getElementById("visualisation").onmousedown = function (e) {
+        e = e || window.event;
+        var element = e.target ? e.target : e.srcElement;
+        if(element.parentElement.id === "visualisation") {
+          mousedownOnIncident(element);
+        }
+      }
+      document.getElementById("visualisation").onclick = function (e) {
+        e = e || window.event;
+        var element = e.target ? e.target : e.srcElement;
+        if(element.parentElement.id === "visualisation") {
+          clickOnIncident(element);
+        }
+      }
+      document.getElementById("visualisation").onmouseout = function (e) {
+        e = e || window.event;
+        var element = e.target ? e.target : e.srcElement;
+        if(element.parentElement.id === "visualisation") {
+          leaveIncident(element);
+        }
+      }
+    </script>
   </body>
 
 </html>
