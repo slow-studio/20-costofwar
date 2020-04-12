@@ -2,6 +2,8 @@ var jsondata = [];
 var dataLoadedCompletely = false
 var totalIncidents = 0;
 
+// read data stream (asynchronously), 
+// so that the visualisation can begin drawing before all the data is downloaded.
 oboe('data/combined-dataset.json')
 .node('incidents.*', function( incident ){
 	++totalIncidents;
@@ -13,65 +15,70 @@ oboe('data/combined-dataset.json')
 	// count total incidents.
 	// note: this is the total number of incident-rectangles we'll draw in our visualisation
 	totalIncidents = events.incidents.length; // ps. this is the same as saying totalIncidents = jsondata.length
-	console.log("dataset loaded! total incidents = ", totalIncidents)
+	console.log(`dataset loaded in ${stuckFrames} frames! total incidents = ${totalIncidents}`)
 });
 
-function setup() {
-	noCanvas()
+// before we begin drawing, let's empty this div of any text
+var viz = document.getElementById("visualisation")
+viz.innerHTML = ""
 
-	// before we begin drawing, let's empty this div of any text
-	select("#visualisation").html("") 
-}
-
+var frameCount = 0
 // to count how many frames we couldn't draw for (because the data hadn't downloaded yet)
-let stuckFrames = 0 
+var stuckFrames = 0 
+
+var drawViz = setInterval(draw, 10);
 
 function draw() {
-
+	++frameCount
 	frameCounter = frameCount - 1 
 	indexOfIncidentToDraw = frameCounter - stuckFrames
 
 	// kill the loop (i.e., stop drawing) if you've finished drawing all the data
 	if(dataLoadedCompletely) {
 		if(indexOfIncidentToDraw >= totalIncidents) { // i.e., we have finished drawing all the data
-			noLoop()
+			clearInterval(drawViz)
 		}
 	}
 
 	if(indexOfIncidentToDraw < totalIncidents) { // need to check this while the data is loading, because sometimes not enough incidents' data has been downloaded yet (on slower internet connections)
 		irect(jsondata, indexOfIncidentToDraw)
-		select("#date").html(jsondata[indexOfIncidentToDraw]["d"])
+		document.getElementById("date").innerHTML = jsondata[indexOfIncidentToDraw]["d"]
 	} else {
 		++stuckFrames
-		// print("stuck for", stuckFrames, "frames")
+		if(dataLoadedCompletely) console.log("stuck for", stuckFrames, "frames")
 	}
+
 }
+
 
 /* make a rectangle that shows an incident */
 
 function irect (dataset, incidentCounter) {
-	i = createDiv().parent('#visualisation').addClass('incidentDeathsRectangle')
+	i = document.createElement("div")
+	viz.appendChild(i)
+	i.setAttribute("class", "incidentDeathsRectangle")
 	minDeaths = parseInt(dataset[incidentCounter]["K"])
 	maxDeaths = parseInt(dataset[incidentCounter]["k"])
 	avgDeaths = (minDeaths+maxDeaths)/2
-	i.style("width", avgDeaths+"px")
-	i.attribute('incidentIndex', incidentCounter)
+	i.style.width = avgDeaths+"px"
+	i.setAttribute("incidentIndex", incidentCounter)
 
 	// we will now have created an incident-rectangle, which may look something like this:
 	// <div class="incidentDeathsRectangle" incidentindex="1" style="width: 2px;"></div>
 
 	// for incidents in which we have civilian names ... give those rectangles a slightly different colour, to make them stand out a bit
-	if(dataset[incidentCounter]["n"].length>0) i.style("backgroundColor", colour_darkred)
+	if(dataset[incidentCounter]["n"].length>0) 
+		i.style.backgroundColor = colour_darkred
 
 }
 
 /* for interacting with incident-rectangles (using the mouse) */
 
-colour_red = 'rgb(255,0,0)'
-colour_green = 'rgb(0,255,0)'
-colour_verydarkred = 'rgb(127,0,0)'
-colour_darkred = 'rgb(200,0,0)'
-colour_black = 'rgb(0,0,0)'
+const colour_red = 'rgb(255,0,0)'
+const colour_green = 'rgb(0,255,0)'
+const colour_verydarkred = 'rgb(127,0,0)'
+const colour_darkred = 'rgb(200,0,0)'
+const colour_black = 'rgb(0,0,0)'
 
 document.getElementById("visualisation").onmouseover = function (e) {
 	e = e || window.event;
@@ -81,7 +88,7 @@ document.getElementById("visualisation").onmouseover = function (e) {
 		incidentRowNumber = element.getAttribute("incidentIndex")
 		incidentCode = jsondata[incidentRowNumber]["i"]
 
-		print("mouseover on # " + incidentCode)
+		console.log(`mouseover on # ${incidentCode}`)
 
 		element.style.backgroundColor = colour_verydarkred
 
@@ -107,7 +114,10 @@ document.getElementById("visualisation").onmouseover = function (e) {
 			poptext += "<br><strong>" + name + "</strong> <small>"+ age + "</small>"
 		}
 
-		popup = createDiv(poptext).parent(element).class('popup')
+		popup = document.createElement("div")
+		popup.innerHTML = poptext
+		element.appendChild(popup)
+		popup.setAttribute("class", "popup")
 
 	}
 }
@@ -117,7 +127,7 @@ document.getElementById("visualisation").onmousedown = function (e) {
 	var element = e.target ? e.target : e.srcElement;
 	if(element.parentElement.id === "visualisation") {
 
-		// print("mouse-key pressed on # " + element.getAttribute("incidentCode"))
+		// console.log("mouse-key pressed on # " + element.getAttribute("incidentCode"))
 
 		element.style.backgroundColor = colour_darkred		
 	}
@@ -128,7 +138,7 @@ document.getElementById("visualisation").onclick = function (e) {
 	var element = e.target ? e.target : e.srcElement;
 	if(element.parentElement.id === "visualisation") {
 
-		// print("mouse clicked # " + element.getAttribute("incidentCode"))
+		// console.log("mouse clicked # " + element.getAttribute("incidentCode"))
 
 		element.style.backgroundColor = colour_verydarkred
 	}
@@ -138,7 +148,7 @@ document.getElementById("visualisation").onmouseout = function (e) {
 	e = e || window.event;
 	var element = e.target ? e.target : e.srcElement;
 	if(element.parentElement.id === "visualisation") {
-		// print("mouse left # " + element.getAttribute("incidentCode"))
+		// console.log("mouse left # " + element.getAttribute("incidentCode"))
 
 		element.style.backgroundColor = colour_red
 
