@@ -26,27 +26,26 @@ var frameCount = 0
 // to count how many frames we couldn't draw for (because the data hadn't downloaded yet)
 var stuckFrames = 0 
 
-var drawViz = setInterval(draw, 10);
+var drawViz = setInterval(draw,0);
 
 function draw() {
-	++frameCount
-	frameCounter = frameCount - 1 
-	indexOfIncidentToDraw = frameCounter - stuckFrames
+	indexOfIncidentToDraw = frameCount - stuckFrames
+
+	if(totalIncidents>0)
+		if(indexOfIncidentToDraw === 0)
+			document.getElementById("fromDate").innerHTML = "from: <strong>" + jsondata[0]["d"] + "</strong>"
 
 	// kill the loop (i.e., stop drawing) if you've finished drawing all the data
-	if(dataLoadedCompletely) {
-		if(indexOfIncidentToDraw >= totalIncidents) { // i.e., we have finished drawing all the data
+	if(dataLoadedCompletely) 
+		if(indexOfIncidentToDraw >= totalIncidents) // i.e., we have finished drawing all the data
 			clearInterval(drawViz)
-		}
-	}
-
+	
 	if(indexOfIncidentToDraw < totalIncidents) { // need to check this while the data is loading, because sometimes not enough incidents' data has been downloaded yet (on slower internet connections)
 		irect(jsondata, indexOfIncidentToDraw)
-		document.getElementById("date").innerHTML = jsondata[indexOfIncidentToDraw]["d"]
-	} else {
-		++stuckFrames
-		if(dataLoadedCompletely) console.log("stuck for", stuckFrames, "frames")
-	}
+		document.getElementById("toDate").innerHTML = "to: <strong>" + jsondata[indexOfIncidentToDraw]["d"] + "</strong>"
+	} else stuckFrames++
+
+	frameCount++
 
 }
 
@@ -57,11 +56,12 @@ function irect (dataset, incidentCounter) {
 	i = document.createElement("div")
 	viz.appendChild(i)
 	i.setAttribute("class", "incidentDeathsRectangle")
+	i.setAttribute("incidentIndex", incidentCounter)
 	minDeaths = parseInt(dataset[incidentCounter]["K"])
 	maxDeaths = parseInt(dataset[incidentCounter]["k"])
 	avgDeaths = (minDeaths+maxDeaths)/2
-	i.style.width = avgDeaths+"px"
-	i.setAttribute("incidentIndex", incidentCounter)
+	 // every box starts off with a 1px width, and then expands (using setTimeout() and the css-transition proprty.)
+	i.style.width = "1px" ; var changeWidth = setTimeout(widen, 100, i, avgDeaths) ;
 
 	// we will now have created an incident-rectangle, which may look something like this:
 	// <div class="incidentDeathsRectangle" incidentindex="1" style="width: 2px;"></div>
@@ -70,6 +70,11 @@ function irect (dataset, incidentCounter) {
 	if(dataset[incidentCounter]["n"].length>0) 
 		i.style.backgroundColor = colour_darkred
 
+}
+
+function widen(i, newWidth) {
+	i.style.width = newWidth+"px"
+	// note: css transitions ensure that this change in width animates gracefully.
 }
 
 /* for interacting with incident-rectangles (using the mouse) */
@@ -150,11 +155,17 @@ document.getElementById("visualisation").onmouseout = function (e) {
 	if(element.parentElement.id === "visualisation") {
 		// console.log("mouse left # " + element.getAttribute("incidentCode"))
 
-		element.style.backgroundColor = colour_red
+		incidentRowNumber = element.getAttribute("incidentIndex")
 
 		/* delete any-and-all child elements (i.e., the popups) */
 		while (element.firstChild) {
 	    	element.removeChild(element.firstChild);
+		}
+
+		if(jsondata[incidentRowNumber]["n"].length>0) {
+			element.style.backgroundColor = colour_darkred
+		} else {
+			element.style.backgroundColor = colour_red
 		}
 	}
 }

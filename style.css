@@ -1,38 +1,92 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:900);
+
 body {
-  padding: 0; margin: 0; /* override the browser's default padding/margins */
-  font-family: sans-serif;
-  font-size: 90%;
+	padding: 0; margin: 0; /* override the browser's default padding/margins */
+	font-family: 'Lato', sans-serif;
+	font-size: 250%;
+	font-weight: 900;
+	line-height: 115%;
 }
 
-#container, #p5_loading {
-	max-width:40rem;
-	margin: 0 auto;
+hr {
+  display: block;
+  clear: both;
+  overflow: hidden; /* i don't quite know why these are required. i copied them off stacey's default css stylesheet. i think they can be gotten rid of */
+  border: none; /* "border:none;" to eliminate the default "border: 1px inset;" attribute, as explained in: http://www.w3.org/TR/CSS2/sample.html */
+  border-top: black solid 1rem;
+  margin: 3rem auto;
+  padding: 0;
+}
+
+a:link { color:red; }
+a:visited { color: rgb(100,0,0); }
+a:hover { color: rgb(200,0,0); }
+a:active { color: rgb(150,0,0); }
+
+p {
+	margin: 1.5rem auto;
+}
+
+h1, h2, h3 {
+	font-weight: 900;
+	line-height: 80%;
+	margin: 3rem auto;
+}
+
+.red {
+	color:red;
+}
+
+#container {
+	max-width: 90%;
+	margin: 3rem auto;
 	margin-bottom: 20rem;
 }
 
 #visualisation {
-	margin: 2rem auto;
+	margin: 1rem auto;
 	line-height: 0px;
 }
 
-.incidentDeathsRectangle {
-	width:1rem; /* will be overrideen by the data-visualisation's javascript */
+.incidentDeathsRectangle  {
+	max-width: 100%;
+	width: 1px; /* will be overrideen by the data-visualisation's javascript */
 	display:inline-block;
-	padding-top:12px; margin-right:1px; margin-bottom:1px;
-	background-color:red;
+	padding-top:1.5rem; margin-bottom:1px; margin-right:1px; 
+	background-color:rgb(255,0,0);
 	transition: background-color .15s;
+	transition: width .5s;
 }
 
-.popup {
-	position: absolute;
-	background: black;
-	font-size: 0.67rem;
-	line-height: .85rem;
-	color: white;
-	padding: 1rem;
-	margin-top: 1px;
-	max-width: 15rem;
+#visualisation .incidentDeathsRectangle {
+	cursor: pointer; 
 }
-.popup span.red {
+
+#visualisation .popup {
+	max-width: 40%;
+	position: absolute; left: 5%;
+	background: black; padding: 1rem; margin-top: 1px;
+	font-size: 1rem; line-height: 120%; color: white;
+}
+#visualisation .popup span.red {
 	color:red;
+}
+
+@media screen and (max-device-width: 720px) {
+
+	body {
+		font-size: 175%;
+	}
+
+	p {
+		margin: 1rem auto;
+	}
+
+	.incidentDeathsRectangle  {
+		padding-top:1.25rem; 
+	}
+
+	#visualisation .popup {
+		max-width: 60%;
+	}
 }
