@@ -45,17 +45,45 @@ h1, h2, h3 {
 
 #visualisation {
 	margin: 1rem auto;
+	line-height:0;
+}
+#visualisation::after {
+		content: "";
+	  	clear: both;
+	  	display: table;
+}
+
+#scroller {
+	display: none;
+	position:fixed; top:0; 
+	padding: 1rem; margin: 0;
+	background: black; color: white; font-size:25%;
+}
+
+.year {
+	width:calc(100%/15);
+	margin:0; padding:0;
+	float:left;
+}
+
+.date {
+	font-size: 25%;
+	margin-bottom: 1rem;
+	text-align:center;
+}
+.viz {
 	line-height: 0px;
 }
 
 .incidentDeathsRectangle  {
-	max-width: 100%;
-	width: 1px; /* will be overrideen by the data-visualisation's javascript */
-	display:inline-block;
-	padding-top:1.5rem; margin-bottom:1px; margin-right:1px; 
+	width: calc(100%-1px);
+	height: 1px; /* will be overrideen by the data-visualisation's javascript */
+	display:float;
+	padding-top:0; line-height:0;
+	margin-bottom:1px; margin-right:1px; 
 	background-color:rgb(255,0,0);
 	transition: background-color .15s;
-	transition: width .5s;
+	transition: height .5s;
 }
 
 #visualisation .incidentDeathsRectangle {
@@ -63,8 +91,8 @@ h1, h2, h3 {
 }
 
 #visualisation .popup {
-	max-width: 40%;
-	position: absolute; left: 5%;
+	width: 30vw;
+	position: relative; top: 0px /* will be set by js */;
 	background: black; padding: 1rem; margin-top: 1px;
 	font-size: 1rem; line-height: 120%; color: white;
 }
@@ -83,10 +111,9 @@ h1, h2, h3 {
 	}
 
 	.incidentDeathsRectangle  {
-		padding-top:1.25rem; 
 	}
 
 	#visualisation .popup {
-		max-width: 60%;
+		width: 60vw;
 	}
 }
