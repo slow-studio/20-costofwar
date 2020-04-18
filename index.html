@@ -4,20 +4,35 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>p5.js example</title>
+
+    <!-- stylesheets -->
     <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- opengraph tags to make this page a rich-object -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/project-image.jpg" />
+
   </head>
 
   <body>
     
     <div id="container">
-      <h1>p5js</h1>
-      <p>i am learning p5js.</p>
-      <div id="parent_to_p5_canvas">
-        <!-- p5js canvas comes here -->
-      </div>
-      <p>this is the end of the page.</p>
-    </div>
+
+        <!-- todo -->
+
+        <!-- project info -->
+        <h1 id="page-heading">p5js</h1>
+        <p>i am learning p5js.</p>
+
+        <!-- project + visualisation -->
+        <div id="parent_to_p5_canvas"></div>
+
+        <!-- footer -->
+        <p>this is the end of the page.</p>
+
+    </div><!-- end: #container -->
 
     <!-- load scripts at the end -->
     <script src="p5.min.js"></script>
