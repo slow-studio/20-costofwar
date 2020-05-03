@@ -26,10 +26,10 @@ var frameCount = 0
 // to count how many frames we couldn't draw for (because the data hadn't downloaded yet)
 var stuckFrames = 0 
 
-var drawViz = setInterval(draw,0);
+var drawViz = setInterval(draw);
 
 function draw() {
-	indexOfIncidentToDraw = frameCount - stuckFrames
+	let indexOfIncidentToDraw = frameCount - stuckFrames
 
 	if(totalIncidents>0)
 		if(indexOfIncidentToDraw === 0)
@@ -53,15 +53,15 @@ function draw() {
 /* make a rectangle that shows an incident */
 
 function irect (dataset, incidentCounter) {
-	i = document.createElement("div")
+	let i = document.createElement("div")
 	viz.appendChild(i)
 	i.setAttribute("class", "incidentDeathsRectangle")
 	i.setAttribute("incidentIndex", incidentCounter)
-	minDeaths = parseInt(dataset[incidentCounter]["K"])
-	maxDeaths = parseInt(dataset[incidentCounter]["k"])
-	avgDeaths = (minDeaths+maxDeaths)/2
+	let minDeaths = parseInt(dataset[incidentCounter]["K"])
+	let maxDeaths = parseInt(dataset[incidentCounter]["k"])
+	let avgDeaths = (minDeaths+maxDeaths)/2
 	 // every box starts off with a 1px width, and then expands (using setTimeout() and the css-transition proprty.)
-	i.style.width = "1px" ; var changeWidth = setTimeout(widen, 100, i, avgDeaths) ;
+	i.style.width = "1px" ; let changeWidth = setTimeout(widen, 100, i, avgDeaths) ;
 
 	// we will now have created an incident-rectangle, which may look something like this:
 	// <div class="incidentDeathsRectangle" incidentindex="1" style="width: 2px;"></div>
@@ -90,21 +90,21 @@ document.getElementById("visualisation").onmouseover = function (e) {
 	var element = e.target ? e.target : e.srcElement;
 	if(element.parentElement.id === "visualisation") {
 
-		incidentRowNumber = element.getAttribute("incidentIndex")
-		incidentCode = jsondata[incidentRowNumber]["i"]
+		let incidentRowNumber = element.getAttribute("incidentIndex")
+		let incidentCode = jsondata[incidentRowNumber]["i"]
 
 		console.log(`mouseover on # ${incidentCode}`)
 
 		element.style.backgroundColor = colour_verydarkred
 
-		enddate = jsondata[incidentRowNumber]["d"]
-		loc_info = jsondata[incidentRowNumber]["l"]
-		target_info = jsondata[incidentRowNumber]["t"]
-		minDeaths = jsondata[incidentRowNumber]["k"]
-		maxDeaths = jsondata[incidentRowNumber]["K"]
-		deaths_toPrint = (minDeaths===maxDeaths)?maxDeaths:[minDeaths,maxDeaths].join('–')
-		names = jsondata[incidentRowNumber]["n"]
-		anyNamesKnown = names.length?true:false
+		let enddate = jsondata[incidentRowNumber]["d"]
+		let loc_info = jsondata[incidentRowNumber]["l"]
+		let target_info = jsondata[incidentRowNumber]["t"]
+		let minDeaths = jsondata[incidentRowNumber]["k"]
+		let maxDeaths = jsondata[incidentRowNumber]["K"]
+		let deaths_toPrint = (minDeaths===maxDeaths)?maxDeaths:[minDeaths,maxDeaths].join('–')
+		let names = jsondata[incidentRowNumber]["n"]
+		let anyNamesKnown = names.length?true:false
 
 		let poptext = ""
 		poptext += "<span class='red'>Date</span><br> " + enddate + "<br><br>"
@@ -113,13 +113,13 @@ document.getElementById("visualisation").onmouseover = function (e) {
 		poptext += "<span class='red'>Civilians killed</span><br> " + deaths_toPrint + "<br><br>"
 		poptext += anyNamesKnown?"<span class='red'>Civilians identified</span>":""
 		for(let i=0 ; i<names.length ; ++i) {
-			name = names[i]["n"]
-			age = names[i]["a"]
+			let name = names[i]["n"]
+			let age = names[i]["a"]
 			if(age === "unknown") age = ""
 			poptext += "<br><strong>" + name + "</strong> <small>"+ age + "</small>"
 		}
 
-		popup = document.createElement("div")
+		let popup = document.createElement("div")
 		popup.innerHTML = poptext
 		element.appendChild(popup)
 		popup.setAttribute("class", "popup")
@@ -155,7 +155,7 @@ document.getElementById("visualisation").onmouseout = function (e) {
 	if(element.parentElement.id === "visualisation") {
 		// console.log("mouse left # " + element.getAttribute("incidentCode"))
 
-		incidentRowNumber = element.getAttribute("incidentIndex")
+		let incidentRowNumber = element.getAttribute("incidentIndex")
 
 		/* delete any-and-all child elements (i.e., the popups) */
 		while (element.firstChild) {
