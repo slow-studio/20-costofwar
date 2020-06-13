@@ -50,6 +50,21 @@ function draw() {
 }
 
 
+/* colours */
+
+const colour = {
+	red0 : 'rgb(255,0,0)',
+	red1 : 'rgb(200,0,0)',
+	red2 : 'rgb(127,0,0)',
+	green : 'rgb(0,255,0)',
+	black : 'rgb(0,0,0)'
+}
+
+
+// to count total civilians killed (as we draw each incident box)
+var totalCivilians = 0
+
+
 /* make a rectangle that shows an incident */
 
 function irect (dataset, incidentCounter) {
@@ -57,8 +72,8 @@ function irect (dataset, incidentCounter) {
 	viz.appendChild(i)
 	i.setAttribute("class", "incidentDeathsRectangle")
 	i.setAttribute("incidentIndex", incidentCounter)
-	let minDeaths = parseInt(dataset[incidentCounter]["K"])
-	let maxDeaths = parseInt(dataset[incidentCounter]["k"])
+	let minDeaths = parseInt(dataset[incidentCounter]["k"])
+	let maxDeaths = parseInt(dataset[incidentCounter]["K"])
 	let avgDeaths = (minDeaths+maxDeaths)/2
 	 // every box starts off with a 1px width, and then expands (using setTimeout() and the css-transition proprty.)
 	i.style.width = "1px" ; let changeWidth = setTimeout(widen, 100, i, avgDeaths) ;
@@ -66,9 +81,15 @@ function irect (dataset, incidentCounter) {
 	// we will now have created an incident-rectangle, which may look something like this:
 	// <div class="incidentDeathsRectangle" incidentindex="1" style="width: 2px;"></div>
 
-	// for incidents in which we have civilian names ... give those rectangles a slightly different colour, to make them stand out a bit
-	if(dataset[incidentCounter]["n"].length>0) 
-		i.style.backgroundColor = colour_darkred
+	// for incidents in which we have civilian names ...
+	if(dataset[incidentCounter]["n"].length>0) {
+		// give those rectangles a slightly different colour, to make them stand out a bit
+		i.style.backgroundColor = colour.red1
+	}
+
+	// record total deaths so far, since the start of the conflict
+	totalCivilians += maxDeaths
+	i.setAttribute("totalCivilians", totalCivilians)
 
 }
 
@@ -77,13 +98,8 @@ function widen(i, newWidth) {
 	// note: css transitions ensure that this change in width animates gracefully.
 }
 
-/* for interacting with incident-rectangles (using the mouse) */
 
-const colour_red = 'rgb(255,0,0)'
-const colour_green = 'rgb(0,255,0)'
-const colour_verydarkred = 'rgb(127,0,0)'
-const colour_darkred = 'rgb(200,0,0)'
-const colour_black = 'rgb(0,0,0)'
+/* for interacting with incident-rectangles (using the mouse) */
 
 document.getElementById("visualisation").onmouseover = function (e) {
 	e = e || window.event;
@@ -91,32 +107,36 @@ document.getElementById("visualisation").onmouseover = function (e) {
 	if(element.parentElement.id === "visualisation") {
 
 		let incidentRowNumber = element.getAttribute("incidentIndex")
-		let incidentCode = jsondata[incidentRowNumber]["i"]
+		let {
+			i : incidentCode,
+			d : enddate,
+			l : loc_info,
+			t : target_info,
+			k : minDeaths,
+			K : maxDeaths,
+			n : names
+		} = jsondata[incidentRowNumber]
 
-		console.log(`mouseover on # ${incidentCode}`)
+		// console.log(`mouseover on # ${incidentCode}`)
 
-		element.style.backgroundColor = colour_verydarkred
+		element.style.backgroundColor = colour.red2
 
-		let enddate = jsondata[incidentRowNumber]["d"]
-		let loc_info = jsondata[incidentRowNumber]["l"]
-		let target_info = jsondata[incidentRowNumber]["t"]
-		let minDeaths = jsondata[incidentRowNumber]["k"]
-		let maxDeaths = jsondata[incidentRowNumber]["K"]
-		let deaths_toPrint = (minDeaths===maxDeaths)?maxDeaths:[minDeaths,maxDeaths].join('–')
-		let names = jsondata[incidentRowNumber]["n"]
-		let anyNamesKnown = names.length?true:false
+		let deaths_toPrint = (minDeaths===maxDeaths) ? maxDeaths : [minDeaths,maxDeaths].join('–')
+		let anyNamesKnown = names.length ? true : false
 
 		let poptext = ""
-		poptext += "<span class='red'>Date</span><br> " + enddate + "<br><br>"
-		poptext += "<span class='red'>Location</span><br> " + loc_info + "<br><br>"
-		poptext += target_info?"<span class='red'>Target:</span> <br>" + target_info + "<br><br>":""
-		poptext += "<span class='red'>Civilians killed</span><br> " + deaths_toPrint + "<br><br>"
-		poptext += anyNamesKnown?"<span class='red'>Civilians identified</span>":""
+		poptext += `<span class='red'>Date</span> <br> ${enddate} <br><br>`
+		poptext += `<span class='red'>Location</span> <br> ${loc_info} <br><br>`
+		poptext += target_info ? `<span class='red'>Target:</span> <br> ${target_info} <br><br>` : ""
+		poptext += `<span class='red'>Civilians killed</span> <br> ${deaths_toPrint} <br><br>`
+		poptext += anyNamesKnown ? `<span class='red'>Civilians identified</span>` : ""
 		for(let i=0 ; i<names.length ; ++i) {
-			let name = names[i]["n"]
-			let age = names[i]["a"]
+			let { 
+				n : name, 
+				a : age 
+			} = names[i]
 			if(age === "unknown") age = ""
-			poptext += "<br><strong>" + name + "</strong> <small>"+ age + "</small>"
+			poptext += `<br> <strong>${name}</strong> <small>${age}</small>`
 		}
 
 		let popup = document.createElement("div")
@@ -134,7 +154,7 @@ document.getElementById("visualisation").onmousedown = function (e) {
 
 		// console.log("mouse-key pressed on # " + element.getAttribute("incidentCode"))
 
-		element.style.backgroundColor = colour_darkred		
+		element.style.backgroundColor = colour.black		
 	}
 }
 
@@ -145,7 +165,7 @@ document.getElementById("visualisation").onclick = function (e) {
 
 		// console.log("mouse clicked # " + element.getAttribute("incidentCode"))
 
-		element.style.backgroundColor = colour_verydarkred
+		element.style.backgroundColor = colour.red2
 	}
 }
 
@@ -163,9 +183,35 @@ document.getElementById("visualisation").onmouseout = function (e) {
 		}
 
 		if(jsondata[incidentRowNumber]["n"].length>0) {
-			element.style.backgroundColor = colour_darkred
+			element.style.backgroundColor = colour.red1
 		} else {
-			element.style.backgroundColor = colour_red
+			element.style.backgroundColor = colour.red0
 		}
 	}
 }
+
+
+// count how many civilians the person has scrolled-past
+
+const scroller = document.getElementById("scroller")
+scroller.style.top = "-" + scroller.offsetHeight + "px"
+
+setInterval( function () {
+	
+	viz = document.getElementById("visualisation")
+	x = viz.offsetLeft
+	y = scroller.offsetHeight
+	let total = document.elementFromPoint(x, y + 1).getAttribute("totalCivilians")
+	if(!total) total = document.elementFromPoint(x, y + 2).getAttribute("totalCivilians")
+	if(total) 
+		total = ((total/1000).toFixed(0))*1000
+	if(total>0) {
+		// console.log(total)
+		scroller.innerHTML = `↑ scrolled past ${Number(total).toLocaleString()} civilians.`
+		// scroller.style.display = "block";
+		scroller.style.top = "0px";
+	} else {
+		// scroller.style.display = "none";
+		scroller.style.top = "-" + scroller.offsetHeight + "px"
+	}
+},1000 )
