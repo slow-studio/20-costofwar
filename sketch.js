@@ -31,9 +31,9 @@ var drawViz = setInterval(draw);
 function draw() {
 	let indexOfIncidentToDraw = frameCount - stuckFrames
 
-	if(totalIncidents>0)
-		if(indexOfIncidentToDraw === 0)
-			document.getElementById("fromDate").innerHTML = "from: <strong>" + jsondata[0]["d"] + "</strong>"
+	// if(totalIncidents>0)
+	// 	if(indexOfIncidentToDraw === 0)
+	// 		document.getElementById("fromDate").innerHTML = "from: <strong>" + jsondata[0]["d"] + "</strong>"
 
 	// kill the loop (i.e., stop drawing) if you've finished drawing all the data
 	if(dataLoadedCompletely) 
@@ -41,8 +41,8 @@ function draw() {
 			clearInterval(drawViz)
 	
 	if(indexOfIncidentToDraw < totalIncidents) { // need to check this while the data is loading, because sometimes not enough incidents' data has been downloaded yet (on slower internet connections)
-		irect(jsondata, indexOfIncidentToDraw)
-		document.getElementById("toDate").innerHTML = "to: <strong>" + jsondata[indexOfIncidentToDraw]["d"] + "</strong>"
+		let drawRect = setTimeout(irect, 3000, jsondata,indexOfIncidentToDraw)
+		// document.getElementById("toDate").innerHTML = "to: <strong>" + jsondata[indexOfIncidentToDraw]["d"] + "</strong>"
 	} else stuckFrames++
 
 	frameCount++

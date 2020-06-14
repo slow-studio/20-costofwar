@@ -3,7 +3,7 @@
 body {
 	padding: 0; margin: 0; /* override the browser's default padding/margins */
 	font-family: 'Lato', sans-serif;
-	font-size: 250%;
+	font-size: 400%;
 	font-weight: 900;
 	line-height: 125%;
 }
@@ -40,7 +40,7 @@ h1, h2, h3 {
 }
 
 #container {
-	max-width: 90%;
+	max-width: 80%;
 	margin: 3rem auto;
 	margin-bottom: 20rem;
 }
@@ -54,7 +54,7 @@ h1, h2, h3 {
 	max-width: 49%;
 	width: 1px; /* will be overrideen by the data-visualisation's javascript */
 	display:inline-block;
-	padding-top:1.5rem; margin-bottom:1px; margin-right:1px; 
+	padding-top:2.5rem; margin-bottom:1px; margin-right:1px; 
 	background-color:rgb(255,0,0);
 	transition: background-color .15s;
 	transition: width .5s;
