@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:900);
+@import url(http://fonts.googleapis.com/css?family=Lato:900,400);
 
 body {
 	padding: 0; margin: 0; /* override the browser's default padding/margins */
@@ -18,7 +18,8 @@ hr {
   padding: 0;
 }
 
-a:link { color:red; }
+a { color: red; text-decoration: none; border-bottom-width: 4px; border-bottom-style: solid;}
+a:link { color: red; }
 a:visited { color: rgb(100,0,0); }
 a:hover { color: rgb(200,0,0); }
 a:active { color: rgb(150,0,0); }
@@ -69,6 +70,9 @@ h1, h2, h3 {
 	background: black; padding: 1rem; margin-top: 1px;
 	font-size: 1rem; line-height: 120%; color: white;
 }
+#visualisation .popup small {
+	font-weight: 400;
+}
 #visualisation .popup span.red {
 	color:red;
 }
@@ -79,16 +83,17 @@ h1, h2, h3 {
 	top:-4rem; /* a value that is slightly more than the height of this element */
 	padding: .5rem; margin: 0;
 	background: black; color: white; 
-	font-size:67%;
+	font-size:1rem;
 	line-height:125%;
 	transition: top 1s;
 }
 
 
 #credits {
-	font-size:67%;
+	font-size:1rem;
 	line-height: 125%;
 }
+#credits a { border-bottom-width: 2.5px; }
 
 @media screen and (max-device-width: 720px) {
 
@@ -105,6 +110,7 @@ h1, h2, h3 {
 	}
 
 	#visualisation .popup {
-		max-width: 60%;
+		max-width: none;
+		width: 60%;
 	}
 }

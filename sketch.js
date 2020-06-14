@@ -104,6 +104,9 @@ function widen(i, newWidth) {
 document.getElementById("visualisation").onmouseover = function (e) {
 	e = e || window.event;
 	var element = e.target ? e.target : e.srcElement;
+	// console.log(e.target)
+	// console.log(e.relatedTarget)
+
 	if(element.parentElement.id === "visualisation") {
 
 		let incidentRowNumber = element.getAttribute("incidentIndex")

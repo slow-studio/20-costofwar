@@ -56,6 +56,39 @@
 <!-- load scripts at the end -->
 <script src="oboe-browser.min.js"></script>
 <script src="sketch.js"></script>
+<script>
+    const c = document.getElementById("credits")
+    c.style.cursor = "pointer"
+    c.onclick = function() {  
+        credits = `
+            &mdash;
+            <br>
+            <!-- info: -->
+            <!--
+            <a href="http://setwrite.in/projects/202006-slow-thecostofwar.html" target="_blank">project</a> 
+            \\ 
+            -->
+            <!-- data: -->
+            <!--
+            <a href="https://www.iraqbodycount.org/" target="_blank">ibc</a> 
+            \\ 
+            -->
+            <!-- visual:  -->
+            <a href="http://slow.studio" target="_blank">slow</a> 
+            \\ 
+            <a href="http://rohit.sh" target="_blank">rohit</a>
+            \\ 
+            <!--
+            <a href="http://jenhaugan.com/" target="_blank">jen</a> 
+            \\ 
+            -->
+            <small>2020</small>
+            `
+            ; 
+        c.innerHTML = credits
+        c.style.cursor = "auto"
+    };
+</script>
 </body>
 
 </html>
