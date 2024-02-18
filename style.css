@@ -8,6 +8,10 @@ body {
 	line-height: 125%;
 }
 
+strong {
+	font-weight: 900;
+}
+
 hr {
   display: block;
   clear: both;
